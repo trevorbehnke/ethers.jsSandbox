@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Fox from "./assets/metaMaskFox.png";
 import Pending from "./components/Pending";
 
-const greeterAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const greeterAddress = "0xC370Af02213Ac277bE1e0EA29E53Af4b1107E51D";
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -45,9 +45,10 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
       try {
-        setStatus("Initiating transaction...");
+        setStatus("Initiating Transaction...");
         setPending(true);
         const tx = await contract.setGreeting(greetingValue);
+        setStatus("Transaction Processing...");
         await tx.wait();
         setGreetingValue("");
         setStatus("Transaction complete!");
@@ -72,7 +73,7 @@ function App() {
     if (greetingValue.length > 0) {
       updateGreeting();
     } else {
-      alert("Please enter a greeting");
+      alert("Please add text to the input field...");
     }
   };
 
@@ -82,8 +83,8 @@ function App() {
         <p
           style={
             status === "Transaction Rejected..."
-              ? { color: "red", fontWeight: "bold" }
-              : { color: "lime", fontWeight: "bold" }
+              ? { color: "red" }
+              : { color: "lime" }
           }
         >
           Status: {status}
@@ -94,7 +95,7 @@ function App() {
             onChange={(e) => setGreetingValue(e.target.value)}
             placeholder="Set new message..."
             value={greetingValue}
-            maxlength="30"
+            maxLength="30"
           />
           <button type="submit">Send</button>
         </form>
