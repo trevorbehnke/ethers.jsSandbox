@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("@nomiclabs/hardhat-waffle");
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -20,6 +21,13 @@ module.exports = {
   solidity: "0.8.4",
   paths: {
     artifacts: "./src/artifacts",
+  },
+  networks: {
+    hardhat: {},
+    ropsten: {
+      url: `${process.env.REACT_APP_INFURA_KEY}`,
+      accounts: [`0x${process.env.REACT_APP_PRIVATE_KEY}`],
+    },
   },
 };
 
