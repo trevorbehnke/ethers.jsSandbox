@@ -11,8 +11,6 @@ function App() {
   const [connected, setConnected] = useState(false);
   const [greeting, setGreeting] = useState("");
   const [greetingValue, setGreetingValue] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState("Ready to go!");
   const [pending, setPending] = useState(false);
 
@@ -47,7 +45,7 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
       try {
-        setStatus("Initiating transaction...(confirm with MetaMask)");
+        setStatus("Initiating transaction...");
         setPending(true);
         const tx = await contract.setGreeting(greetingValue);
         await tx.wait();
@@ -60,27 +58,27 @@ function App() {
         fetchGreeting();
       } catch (err) {
         console.log("Error: ", err);
-        setError(true);
-        setErrorMessage("Transaction Rejected...");
         setPending(false);
-        setStatus("Ready to go!");
+        setStatus("Transaction Rejected...");
         setTimeout(() => {
-          setError(false);
-        }, 5000);
+          setStatus("Ready to go!");
+        }, 3000);
       }
     }
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    updateGreeting();
+    if (greetingValue.length > 0) {
+      updateGreeting();
+    } else {
+      alert("Please enter a greeting");
+    }
   };
 
   function connectedTrue() {
     return (
       <div>
-        {pending && <Pending />}
-        <p>Success: Web3 Injected</p>
         <p>Greeting: {greeting}</p>
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
@@ -90,9 +88,16 @@ function App() {
           />
           <button type="submit">Send</button>
         </form>
-        {error && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <p>Status: {status}</p>
-        {pending && <p>Pending...</p>}
+        <p
+          style={
+            status === "Transaction Rejected..."
+              ? { color: "red" }
+              : { color: "green" }
+          }
+        >
+          Status: {status}
+        </p>
+        {pending && <Pending />}
       </div>
     );
   }
