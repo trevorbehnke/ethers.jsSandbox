@@ -79,25 +79,25 @@ function App() {
   function connectedTrue() {
     return (
       <div>
-        <p>Greeting: {greeting}</p>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <input
-            onChange={(e) => setGreetingValue(e.target.value)}
-            placeholder="Set new greeting..."
-            value={greetingValue}
-          />
-          <button type="submit">Send</button>
-        </form>
         <p
           style={
             status === "Transaction Rejected..."
-              ? { color: "red" }
-              : { color: "green" }
+              ? { color: "red", fontWeight: "bold" }
+              : { color: "lime", fontWeight: "bold" }
           }
         >
           Status: {status}
         </p>
-        {pending && <Pending />}
+        {pending ? <Pending /> : <h3>Message: {greeting}</h3>}
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <input
+            onChange={(e) => setGreetingValue(e.target.value)}
+            placeholder="Set new message..."
+            value={greetingValue}
+            maxlength="30"
+          />
+          <button type="submit">Send</button>
+        </form>
       </div>
     );
   }
